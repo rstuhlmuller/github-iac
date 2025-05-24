@@ -20,12 +20,16 @@ inputs = {
       description = "Kubernetes homelab deployment"
       visibility  = "public"
     }
-    personal-webiste = {
+    personal-website = {
       description = "Personal website"
       visibility  = "public"
     }
     personal-website-api = {
       description = "Personal website API"
+      visibility  = "public"
+    }
+    workflows = {
+      description = "GitHub workflows for the organization"
       visibility  = "public"
     }
   }

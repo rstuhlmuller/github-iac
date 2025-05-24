@@ -20,7 +20,7 @@ inputs = {
       description = "Kubernetes homelab deployment"
       visibility  = "public"
     }
-    personal-webiste = {
+    personal-website = {
       description = "Personal website"
       visibility  = "public"
     }

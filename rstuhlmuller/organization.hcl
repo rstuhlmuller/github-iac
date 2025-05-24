@@ -26,7 +26,7 @@ locals {
     require_last_push_approval        = false
     require_pull_request_reviews      = false
     required_approving_review_count   = 2
-    require_signed_commits            = true
+    required_signatures               = false
     required_linear_history           = false
     required_status_checks            = []
     required_status_checks_are_strict = false

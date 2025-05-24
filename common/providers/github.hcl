@@ -8,23 +8,13 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<-EOF
   provider "aws" {region = "us-east-1"}
-  data "aws_ssm_parameter" "github_app_id" {
-    name = "/github-iac/app_id"
-  }
-  data "aws_ssm_parameter" "github_app_installation_id" {
-    name = "/github-iac/${local.organization}/app_installation_id"
-  }
-  data "aws_ssm_parameter" "github_app_pem_file" {
-    name = "/github-iac/app_pem_file"
+  data "aws_ssm_parameter" "personal_access_token" {
+    name = "/github-iac/personal_access_token"
   }
 
   provider "github" {
     owner = "${local.organization}"
-    app_auth {
-      id              = data.aws_ssm_parameter.github_app_id.value
-      installation_id = data.aws_ssm_parameter.github_app_installation_id.value
-      pem_file        = data.aws_ssm_parameter.github_app_pem_file.value
-    }
+    token = data.aws_ssm_parameter.personal_access_token.value
   }
   EOF
 }

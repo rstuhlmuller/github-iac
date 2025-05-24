@@ -26,6 +26,7 @@ resource "github_repository" "repo" {
   for_each    = local.github_repositories
   name        = each.key
   description = each.value.description
+  auto_init   = true
 
   visibility             = each.value.visibility
   gitignore_template     = each.value.gitignore_template
@@ -96,6 +97,7 @@ resource "github_repository_ruleset" "ruleset" {
       }
     }
   }
+  depends_on = [github_repository.repo]
 }
 
 resource "github_branch_default" "self" {

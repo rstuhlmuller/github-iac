@@ -1,7 +1,7 @@
 name: "Default Checks"
 
 permissions: 
-  check: read
+  checks: read
   statuses: read
 
 on:
@@ -12,5 +12,3 @@ on:
 jobs:
   check:
     uses: rstuhlmuller/workflows/.github/workflows/default.yml@main
-
-    

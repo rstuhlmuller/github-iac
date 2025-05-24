@@ -20,15 +20,32 @@ locals {
     allow_squash_merge         = true
     archived                   = false
   }
-  default_branch_protection_config = {
-    dismiss_stale_reviews             = true
-    require_conversation_resolution   = false
-    require_last_push_approval        = false
-    require_pull_request_reviews      = false
-    required_approving_review_count   = 2
-    required_signatures               = true
-    required_linear_history           = false
-    required_status_checks            = []
-    required_status_checks_are_strict = false
+  default_repository_ruleset_config = {
+    name                            = ""
+    target                          = "branch"
+    enforcement                     = "active"
+    require_code_owner_reviews      = true
+    require_signed_commits          = true
+    required_approving_review_count = 1
+    conditions = [
+      {
+        include = ["~DEFAULT_BRANCH"]
+        exclude = []
+      }
+    ]
+    creation                = true
+    update                  = false
+    deletion                = true
+    required_linear_history = true
+    required_signatures     = true
+    required_deployments    = []
+    required_status_checks = [
+      {
+        strict_required_status_checks_policy = true
+        required_check = [{
+          context = "check / merge-checks"
+        }]
+      }
+    ]
   }
 }

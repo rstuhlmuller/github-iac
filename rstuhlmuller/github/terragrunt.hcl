@@ -14,7 +14,8 @@ locals {
 }
 
 inputs = {
-  default_repository_config = local.org_vars.default_repository_config
+  default_repository_config         = local.org_vars.default_repository_config
+  default_repository_ruleset_config = local.org_vars.default_repository_ruleset_config
   github_repositories = {
     # Bootstrap this repo
     github-iac = {

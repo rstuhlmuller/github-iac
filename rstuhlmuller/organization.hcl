@@ -20,15 +20,4 @@ locals {
     allow_squash_merge         = true
     archived                   = false
   }
-  default_branch_protection_config = {
-    dismiss_stale_reviews             = true
-    require_conversation_resolution   = false
-    require_last_push_approval        = false
-    require_pull_request_reviews      = false
-    required_approving_review_count   = 2
-    required_signatures               = true
-    required_linear_history           = false
-    required_status_checks            = []
-    required_status_checks_are_strict = false
-  }
 }

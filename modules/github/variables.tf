@@ -90,7 +90,7 @@ variable "default_repository_ruleset_config" {
       }
     ]
     creation                = true
-    update                  = true
+    update                  = false
     deletion                = true
     required_linear_history = true
     required_signatures     = true

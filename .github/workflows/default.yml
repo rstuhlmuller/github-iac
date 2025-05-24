@@ -1,5 +1,9 @@
 name: "Default Checks"
 
+permissions: 
+  check: read
+  statuses: read
+
 on:
   pull_request:
     branches:

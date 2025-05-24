@@ -28,5 +28,9 @@ inputs = {
       description = "Personal website API"
       visibility  = "public"
     }
+    workflows = {
+      description = "GitHub workflows for the organization"
+      visibility  = "public"
+    }
   }
 }

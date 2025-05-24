@@ -1,0 +1,1 @@
+../../common/locks/github.terraform.lock.hcl

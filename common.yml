@@ -1,0 +1,6 @@
+project_name: github-iac
+default_tags:
+  ManualBuild: false
+  ManualTag: false
+  Repository: rstuhlmuller/github-iac
+  Owner: rstuhlmuller

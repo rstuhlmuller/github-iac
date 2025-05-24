@@ -1,4 +1,4 @@
-name: "Default workflow for workflow local checks"
+name: "Default Checks"
 
 on:
   pull_request:

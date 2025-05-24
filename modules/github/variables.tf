@@ -67,8 +67,8 @@ variable "default_repository_ruleset_config" {
       required_deployment_environments = list(string)
     }))
     required_status_checks = optional(set(object({
-      strict_required_status_checks_policy = bool
-      do_not_enforce_on_create             = bool
+      strict_required_status_checks_policy = optional(bool)
+      do_not_enforce_on_create             = optional(bool)
       required_check = set(object({
         context        = string
         integration_id = optional(string)
@@ -82,7 +82,6 @@ variable "default_repository_ruleset_config" {
     require_code_owner_reviews      = true
     require_signed_commits          = true
     required_approving_review_count = 1
-    required_status_checks          = []
     conditions = [
       {
         include = ["~DEFAULT_BRANCH"]
@@ -95,9 +94,7 @@ variable "default_repository_ruleset_config" {
     required_linear_history = true
     required_signatures     = true
     required_deployments    = []
-    required_status_checks = [
-      "default / merge-checks"
-    ]
+    required_status_checks  = []
   }
   description = "Default settings for a branch ruleset. This is merged with the ruleset configuration for each repository."
 }

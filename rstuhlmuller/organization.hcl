@@ -27,9 +27,6 @@ locals {
     require_code_owner_reviews      = true
     require_signed_commits          = true
     required_approving_review_count = 1
-    required_status_checks = [
-      "check / merge-checks"
-    ]
     conditions = [
       {
         include = ["~DEFAULT_BRANCH"]
@@ -43,7 +40,12 @@ locals {
     required_signatures     = true
     required_deployments    = []
     required_status_checks = [
-      "default / merge-checks"
+      {
+        strict_required_status_checks_policy = true
+        required_check = [{
+          context = "check / merge-checks"
+        }]
+      }
     ]
   }
 }

@@ -28,7 +28,7 @@ locals {
     require_signed_commits          = true
     required_approving_review_count = 1
     required_status_checks = [
-      "checks / merge-checks"
+      "check / merge-checks"
     ]
     conditions = [
       {

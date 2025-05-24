@@ -16,6 +16,11 @@ locals {
 inputs = {
   default_repository_config = local.org_vars.default_repository_config
   github_repositories = {
+    # Bootstrap this repo
+    github-iac = {
+      description = "Infrastructure as Code for Github Repositories"
+      visibility  = "public"
+    }
     homelab = {
       description = "Kubernetes homelab deployment"
       visibility  = "public"

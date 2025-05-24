@@ -1,0 +1,10 @@
+name: "Default workflow for workflow local checks"
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    uses: rstuhlmuller/workflows/.github/workflows/default.yml@main

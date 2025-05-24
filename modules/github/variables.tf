@@ -95,7 +95,9 @@ variable "default_repository_ruleset_config" {
     required_linear_history = true
     required_signatures     = true
     required_deployments    = []
-    required_status_checks  = []
+    required_status_checks = [
+      "default / merge-checks"
+    ]
   }
   description = "Default settings for a branch ruleset. This is merged with the ruleset configuration for each repository."
 }

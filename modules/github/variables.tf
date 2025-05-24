@@ -16,7 +16,7 @@ variable "default_repository_config" {
       owner      = string
       repository = string
     }))
-    protected_branches        = list(any)
+    ruleset                   = list(any)
     delete_branch_on_merge    = bool
     allow_update_branch       = bool
     allow_auto_merge          = bool
@@ -34,7 +34,7 @@ variable "default_repository_config" {
     require_code_owner_reviews = false
     is_template                = false
     repository_template        = null
-    protected_branches         = [{ name = "main" }]
+    ruleset                    = [{ name = "main" }]
     delete_branch_on_merge     = true
     allow_update_branch        = false
     allow_auto_merge           = false
@@ -46,28 +46,56 @@ variable "default_repository_config" {
   }
 }
 
-variable "default_branch_protection_config" {
+variable "default_repository_ruleset_config" {
   type = object({
-    dismiss_stale_reviews             = bool
-    require_conversation_resolution   = bool
-    require_last_push_approval        = bool
-    require_pull_request_reviews      = bool
-    require_signed_commits            = bool
-    required_approving_review_count   = number
-    required_linear_history           = bool
-    required_status_checks            = set(string)
-    required_status_checks_are_strict = bool
+    name                            = string
+    target                          = string
+    enforcement                     = string
+    require_code_owner_reviews      = bool
+    require_signed_commits          = bool
+    required_approving_review_count = number
+    conditions = set(object({
+      include = list(string)
+      exclude = list(string)
+    }))
+    creation                = bool
+    update                  = bool
+    deletion                = bool
+    required_linear_history = bool
+    required_signatures     = bool
+    required_deployments = set(object({
+      required_deployment_environments = list(string)
+    }))
+    required_status_checks = optional(set(object({
+      strict_required_status_checks_policy = bool
+      do_not_enforce_on_create             = bool
+      required_check = set(object({
+        context        = string
+        integration_id = optional(string)
+      }))
+    })))
   })
   default = {
-    dismiss_stale_reviews             = true
-    require_conversation_resolution   = false
-    require_last_push_approval        = false
-    require_pull_request_reviews      = true
-    require_signed_commits            = true
-    required_approving_review_count   = 2
-    required_linear_history           = false
-    required_status_checks            = []
-    required_status_checks_are_strict = true
+    name                            = ""
+    target                          = "branch"
+    enforcement                     = "active"
+    require_code_owner_reviews      = true
+    require_signed_commits          = true
+    required_approving_review_count = 1
+    required_status_checks          = []
+    conditions = [
+      {
+        include = ["~DEFAULT_BRANCH"]
+        exclude = []
+      }
+    ]
+    creation                = true
+    update                  = true
+    deletion                = true
+    required_linear_history = true
+    required_signatures     = true
+    required_deployments    = []
+    required_status_checks  = []
   }
-  description = "Default settings for a branch protection"
+  description = "Default settings for a branch ruleset. This is merged with the ruleset configuration for each repository."
 }

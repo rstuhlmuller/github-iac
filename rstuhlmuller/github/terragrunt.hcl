@@ -4,8 +4,9 @@ include "root" {
 include "github_provider" {
   path = "${dirname(find_in_parent_folders("root.hcl"))}/common/providers/github.hcl"
 }
-include "github" {
-  path = "${dirname(find_in_parent_folders("root.hcl"))}/common/github.hcl"
+
+terraform {
+  source = "${get_repo_root()}//modules/github"
 }
 
 locals {
@@ -13,11 +14,18 @@ locals {
 }
 
 inputs = {
-  default_repository_config        = local.org_vars.default_repository_config
-  default_branch_protection_config = local.org_vars.default_branch_protection_config
+  default_repository_config = local.org_vars.default_repository_config
   github_repositories = {
     homelab = {
       description = "Kubernetes homelab deployment"
+      visibility  = "public"
+    }
+    personal-webiste = {
+      description = "Personal website"
+      visibility  = "public"
+    }
+    personal-website-api = {
+      description = "Personal website API"
       visibility  = "public"
     }
   }

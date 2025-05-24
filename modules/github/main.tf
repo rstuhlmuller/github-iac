@@ -2,13 +2,13 @@ locals {
   github_repositories = {
     for name, repo_config in var.github_repositories : name => merge(var.default_repository_config, repo_config)
   }
-  repository_protected_branches = flatten([
+  repository_rulesets = flatten([
     for repository_name, repository_config in local.github_repositories : [
-      for protected_branch in repository_config.protected_branches :
+      for ruleset in repository_config.ruleset :
       merge(
         merge(
-          var.default_branch_protection_config,
-          protected_branch,
+          var.default_repository_ruleset_config,
+          ruleset,
         ),
         {
           repository                 = repository_name
@@ -48,32 +48,52 @@ resource "github_repository" "repo" {
   allow_rebase_merge        = each.value.allow_rebase_merge
 }
 
-resource "github_branch_protection" "repo" {
-  #checkov:skip=CKV_GIT_5:Defaults to double enforcement
-  #checkov:skip=CKV_GIT_6:No need to force signed commit
+resource "github_repository_ruleset" "ruleset" {
   for_each = {
-    for branch in local.repository_protected_branches :
-    "${branch.repository}.${branch.name}" => branch if branch.archivedrepository == null || branch.archivedrepository == false
+    for ruleset in local.repository_rulesets :
+    "${ruleset.repository}.${ruleset.name}" => ruleset if ruleset.archivedrepository == null || ruleset.archivedrepository == false
   }
-  repository_id          = github_repository.repo[each.value.repository].node_id
-  pattern                = each.value.name
-  require_signed_commits = each.value.require_signed_commits
+  name        = each.value.name
+  repository  = github_repository.repo[each.value.repository].name
+  target      = each.value.target
+  enforcement = each.value.enforcement
 
-  dynamic "required_pull_request_reviews" {
-    for_each = try(each.value.require_pull_request_reviews, true) != false ? toset([1]) : toset([])
+  dynamic "conditions" {
+    for_each = each.value.conditions
     content {
-      required_approving_review_count = each.value.required_approving_review_count
-      dismiss_stale_reviews           = each.value.dismiss_stale_reviews
-      require_code_owner_reviews      = each.value.require_code_owner_reviews
-      require_last_push_approval      = each.value.require_last_push_approval
+      ref_name {
+        include = conditions.value.include
+        exclude = conditions.value.exclude
+      }
     }
   }
 
-  dynamic "required_status_checks" {
-    for_each = each.value.required_status_checks != [] ? toset(["each.value.repository"]) : toset([])
-    content {
-      strict   = each.value.required_status_checks_are_strict
-      contexts = each.value.required_status_checks
+  rules {
+    creation                = each.value.creation
+    update                  = each.value.update
+    deletion                = each.value.deletion
+    required_linear_history = each.value.required_linear_history
+    required_signatures     = each.value.required_signatures
+
+    dynamic "required_deployments" {
+      for_each = each.value.required_deployments
+      content {
+        required_deployment_environments = required_deployments.value.required_deployment_environments
+      }
+    }
+    dynamic "required_status_checks" {
+      for_each = each.value.required_status_checks
+      content {
+        strict_required_status_checks_policy = required_status_checks.value.required_status_checks_are_strict
+        do_not_enforce_on_create             = required_status_checks.value.do_not_enforce_on_create
+        dynamic "required_check" {
+          for_each = required_status_checks.value.required_check
+          content {
+            context        = required_check.value.context
+            integration_id = required_check.value.integration_id
+          }
+        }
+      }
     }
   }
 }

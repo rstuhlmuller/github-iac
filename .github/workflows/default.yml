@@ -3,6 +3,7 @@ name: "Default Checks"
 permissions: 
   checks: read
   statuses: read
+  contents: read
 
 on:
   pull_request:

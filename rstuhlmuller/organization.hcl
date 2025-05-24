@@ -20,4 +20,30 @@ locals {
     allow_squash_merge         = true
     archived                   = false
   }
+  default_repository_ruleset_config = {
+    name                            = ""
+    target                          = "branch"
+    enforcement                     = "active"
+    require_code_owner_reviews      = true
+    require_signed_commits          = true
+    required_approving_review_count = 1
+    required_status_checks = [
+      "checks / merge-checks"
+    ]
+    conditions = [
+      {
+        include = ["~DEFAULT_BRANCH"]
+        exclude = []
+      }
+    ]
+    creation                = true
+    update                  = false
+    deletion                = true
+    required_linear_history = true
+    required_signatures     = true
+    required_deployments    = []
+    required_status_checks = [
+      "default / merge-checks"
+    ]
+  }
 }

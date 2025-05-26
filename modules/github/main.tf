@@ -82,6 +82,13 @@ resource "github_repository_ruleset" "ruleset" {
         required_deployment_environments = required_deployments.value.required_deployment_environments
       }
     }
+    dynamic "pull_request" {
+      for_each = each.value.pull_requests
+      content {
+        required_approving_review_count = pull_request.value.required_approving_review_count
+        require_code_owner_review       = pull_request.value.require_code_owner_reviews
+      }
+    }
     dynamic "required_status_checks" {
       for_each = each.value.required_status_checks
       content {

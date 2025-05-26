@@ -21,12 +21,11 @@ locals {
     archived                   = false
   }
   default_repository_ruleset_config = {
-    name                            = ""
-    target                          = "branch"
-    enforcement                     = "active"
-    require_code_owner_reviews      = true
-    require_signed_commits          = true
-    required_approving_review_count = 1
+    name                       = ""
+    target                     = "branch"
+    enforcement                = "active"
+    require_code_owner_reviews = true
+    require_signed_commits     = true
     conditions = [
       {
         include = ["~DEFAULT_BRANCH"]
@@ -47,5 +46,9 @@ locals {
         }]
       }
     ]
+    pull_requests = [{
+      required_approving_review_count = 0
+      require_code_owner_reviews      = true
+    }]
   }
 }

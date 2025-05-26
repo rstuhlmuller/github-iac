@@ -11,7 +11,7 @@ locals {
     ruleset                    = [{ name = "main" }]
     delete_branch_on_merge     = true
     allow_update_branch        = false
-    allow_auto_merge           = false
+    allow_auto_merge           = true
     allow_merge_commit         = false
     allow_squash_merge         = false
     squash_merge_commit_title  = "COMMIT_OR_PR_TITLE"

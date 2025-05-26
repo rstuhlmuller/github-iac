@@ -48,12 +48,11 @@ variable "default_repository_config" {
 
 variable "default_repository_ruleset_config" {
   type = object({
-    name                            = string
-    target                          = string
-    enforcement                     = string
-    require_code_owner_reviews      = bool
-    require_signed_commits          = bool
-    required_approving_review_count = number
+    name                       = string
+    target                     = string
+    enforcement                = string
+    require_code_owner_reviews = bool
+    require_signed_commits     = bool
     conditions = set(object({
       include = list(string)
       exclude = list(string)
@@ -74,14 +73,14 @@ variable "default_repository_ruleset_config" {
         integration_id = optional(string)
       }))
     })))
+    pull_requests = set(any)
   })
   default = {
-    name                            = ""
-    target                          = "branch"
-    enforcement                     = "active"
-    require_code_owner_reviews      = true
-    require_signed_commits          = true
-    required_approving_review_count = 1
+    name                       = ""
+    target                     = "branch"
+    enforcement                = "active"
+    require_code_owner_reviews = true
+    require_signed_commits     = true
     conditions = [
       {
         include = ["~DEFAULT_BRANCH"]
@@ -95,6 +94,7 @@ variable "default_repository_ruleset_config" {
     required_signatures     = true
     required_deployments    = []
     required_status_checks  = []
+    pull_requests           = []
   }
   description = "Default settings for a branch ruleset. This is merged with the ruleset configuration for each repository."
 }

@@ -26,6 +26,10 @@ inputs = {
       description = "Kubernetes homelab deployment"
       visibility  = "public"
     }
+    openwebui-helm-charts = {
+      description = "Helm charts for OpenWebUI with MCPO sidecar"
+      visibility  = "public"
+    }
     personal-website = {
       description = "Personal website"
       visibility  = "public"

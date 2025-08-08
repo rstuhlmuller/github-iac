@@ -33,6 +33,8 @@ inputs = {
     personal-website = {
       description = "Personal website"
       visibility  = "public"
+      require_signed_commits = false
+      delete_branch_on_merge = false
     }
     personal-website-api = {
       description = "Personal website API"

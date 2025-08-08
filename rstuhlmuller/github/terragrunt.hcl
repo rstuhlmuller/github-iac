@@ -33,7 +33,10 @@ inputs = {
     personal-website = {
       description = "Personal website"
       visibility  = "public"
-      require_signed_commits = false
+      ruleset = [{
+        name = "main" 
+        required_signatures = false
+      }]
       delete_branch_on_merge = false
     }
     personal-website-api = {

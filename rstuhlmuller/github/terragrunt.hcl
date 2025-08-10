@@ -36,8 +36,12 @@ inputs = {
       ruleset = [{
         name = "main" 
         required_signatures = false
+        bypass_actors = [{
+          actor_id    = 5
+          actor_type  = "RepositoryRole"
+          bypass_mode = "always"
+        }]
       }]
-      delete_branch_on_merge = false
     }
     personal-website-api = {
       description = "Personal website API"

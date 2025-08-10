@@ -37,6 +37,7 @@ locals {
     deletion                = true
     required_linear_history = true
     required_signatures     = true
+    bypass_actors           = []
     required_deployments    = []
     required_status_checks = [
       {

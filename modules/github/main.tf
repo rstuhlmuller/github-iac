@@ -69,6 +69,15 @@ resource "github_repository_ruleset" "ruleset" {
     }
   }
 
+  dynamic "bypass_actors" {
+    for_each = each.value.bypass_actors
+    content {
+      actor_id    = bypass_actors.value.actor_id
+      actor_type  = bypass_actors.value.actor_type
+      bypass_mode = bypass_actors.value.bypass_mode
+    }
+  }
+
   rules {
     creation                = each.value.creation
     update                  = each.value.update

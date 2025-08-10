@@ -62,6 +62,11 @@ variable "default_repository_ruleset_config" {
     deletion                = bool
     required_linear_history = bool
     required_signatures     = bool
+    bypass_actors = set(object({
+      actor_id    = number
+      actor_type  = string
+      bypass_mode = string
+    }))
     required_deployments = set(object({
       required_deployment_environments = list(string)
     }))
@@ -92,6 +97,7 @@ variable "default_repository_ruleset_config" {
     deletion                = true
     required_linear_history = true
     required_signatures     = true
+    bypass_actors           = []
     required_deployments    = []
     required_status_checks  = []
     pull_requests           = []

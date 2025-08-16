@@ -26,6 +26,10 @@ inputs = {
       description = "Kubernetes homelab deployment"
       visibility  = "public"
     }
+    octobot-deploy = {
+      description = "Helm charts for OctoBot"
+      visibility = "public"
+    }
     openwebui-helm-charts = {
       description = "Helm charts for OpenWebUI with MCPO sidecar"
       visibility  = "public"

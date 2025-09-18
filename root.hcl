@@ -23,7 +23,7 @@ remote_state {
     key            = "IaC/${lower(local.project_name)}/${path_relative_to_include()}/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
-    dynamodb_table = "rstuhlmuller-aws-s3-use1-terraform-locks"
+    use_lockfile   = true
   }
 }
 

@@ -26,6 +26,10 @@ inputs = {
       description = "Infrastructure as Code for Github Repositories"
       visibility  = "public"
     }
+    grafana-iac = {
+      description = "Infrastructure as Code for Grafana configuration"
+      visibility  = "public"
+    }
     homelab = {
       description = "Kubernetes homelab deployment"
       visibility  = "public"

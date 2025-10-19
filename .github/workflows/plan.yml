@@ -1,7 +1,7 @@
 name: Terragrunt Plan
 run-name: Terragrunt Plan - ${{ github.sha }}
 
-trigger:
+on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
     branches:

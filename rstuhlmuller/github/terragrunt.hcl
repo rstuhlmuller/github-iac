@@ -46,6 +46,10 @@ inputs = {
       description = "Helm charts for OpenWebUI with MCPO sidecar"
       visibility  = "public"
     }
+    renovate = {
+      description = "Renovate bot configuration repository"
+      visibility  = "public"
+    }
     wire-pod-deploy = {
       description = "Helm charts for Vector robot wire-pod deployment"
       visibility  = "public"

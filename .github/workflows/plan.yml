@@ -52,6 +52,6 @@ jobs:
         with:
           tofu_version: "1.10.6"
           tg_version: "0.84.1"
-          tg_command: plan --log-custom-format '%msg' --log-level error
+          tg_command: plan --log-format bare --log-level error
           tg_dir: ${{ matrix.directory }}
           tg_comment: "1"

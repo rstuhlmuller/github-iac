@@ -55,6 +55,8 @@ jobs:
           tg_dir: ${{ matrix.directory }}
 
       - name: Post Terragrunt Plan as PR Comment
+        env:
+          TF_PLUGIN_CACHE_DIR: ${{ env.TF_PLUGIN_CACHE_DIR }}
         run: |
           for f in  $(find ./*/ -name plan.out); do
             tofu show -json "$f" > "${f%.out}_plan.json"

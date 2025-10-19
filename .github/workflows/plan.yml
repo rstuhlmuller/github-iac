@@ -13,6 +13,9 @@ permissions:
   contents: read
   id-token: write
 
+env:
+  TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
+
 jobs:
   terragrunt-plan:
     runs-on: ubuntu-latest

@@ -1,0 +1,57 @@
+name: Terragrunt Plan
+run-name: Terragrunt Plan - PR/${{ github.event.pull_request.number }}
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches:
+      - main
+
+permissions:
+  checks: write
+  statuses: write
+  contents: read
+  id-token: write
+  pull-requests: write
+
+env:
+  TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
+
+jobs:
+  terragrunt-plan:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: "terragrunt-${{ matrix.directory }}"
+    strategy:
+      matrix:
+        directory:
+          - "rstuhlmuller/github"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::716182248480:role/Github-TF-State
+
+      - name: Create OpenTofu Plugin Cache Dir
+        run: mkdir -p $TF_PLUGIN_CACHE_DIR
+
+      - name: OpenTofu Plugin Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
+          key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/.terraform.lock.hcl') }}
+
+      - name: Terragrunt Plan
+        uses: gruntwork-io/terragrunt-action@v3
+        env:
+          TF_PLUGIN_CACHE_DIR: ${{ env.TF_PLUGIN_CACHE_DIR }}
+        with:
+          tofu_version: "1.10.6"
+          tg_version: "0.84.1"
+          tg_command: plan --log-format bare --log-level error
+          tg_dir: ${{ matrix.directory }}
+          tg_comment: "1"

@@ -1,5 +1,5 @@
 name: Terragrunt Plan
-run-name: Terragrunt Plan - ${{ github.sha }}
+run-name: Terragrunt Plan - PR/${{ github.event.pull_request.number }}
 
 on:
   pull_request:
@@ -26,8 +26,8 @@ jobs:
       - name: Install Terragrunt and OpenTofu
         uses: gruntwork-io/terragrunt-action@v3
         with:
-          terraform_version: "1.7.6"
-          terragrunt_version: "0.45.19"
+          tf_version: "1.10.6"
+          tg_version: "0.84.1"
 
       - name: Terragrunt Plan
         working-directory: ${{ matrix.directory }}

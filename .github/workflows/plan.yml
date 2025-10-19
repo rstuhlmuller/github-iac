@@ -33,12 +33,12 @@ jobs:
           role-to-assume: arn:aws:iam::716182248480:role/Github-TF-State
 
       - name: Create OpenTofu Plugin Cache Dir
-        run: mkdir -p ${{ github.workspace }}/.terraform.d/plugin-cache
+        run: mkdir -p $TF_PLUGIN_CACHE_DIR
 
       - name: OpenTofu Plugin Cache
         uses: actions/cache@v4
         with:
-          path: ${{ github.workspace }}/.terraform.d/plugin-cache
+          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
           key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/.terraform.lock.hcl') }}
 
       - name: Install Terragrunt and OpenTofu

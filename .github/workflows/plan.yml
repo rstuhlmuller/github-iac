@@ -33,7 +33,7 @@ jobs:
       - name: Install Terragrunt and OpenTofu
         uses: gruntwork-io/terragrunt-action@v3
         concurrency:
-          group: "terragrunt-plan-${{ matrix.directory }}"
+          group: "terragrunt-${{ matrix.directory }}"
         with:
           tofu_version: "1.10.6"
           tg_version: "0.84.1"

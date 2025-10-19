@@ -50,3 +50,73 @@ jobs:
           tg_version: "0.84.1"
           tg_command: plan
           tg_dir: ${{ matrix.directory }}
+
+      - name: Post Terragrunt Plan as PR Comment
+        run: |
+          for f in  $(find ./*/ -name plan.out); do
+            terraform show -json "$f" > "${f%.out}_plan.json"
+            items=$(cat ${f%.out}_plan.json | jq -r '.resource_changes[]? | "\(.change.actions) \(.address)"' | grep -v "no-op" || true)
+            if [ ! -z "$items" ]; then
+              # Sorted Output
+              echo '<details><summary>' >> ${OUTPUT}
+              echo '' >> ${OUTPUT}
+              echo "## $layer" >> ${OUTPUT}
+              echo $items | xargs -n2 sh -c 'echo "- \`$1\`" $2' dummy >> ${OUTPUT}
+              echo '</summary>' >> ${OUTPUT}
+              echo '' >> ${OUTPUT}
+              echo '``` hcl' >> ${OUTPUT}
+              terraform show -no-color plan.out >> ${OUTPUT}
+              echo '```' >> ${OUTPUT}
+              echo '</details>' >> ${OUTPUT}
+              # The light Output in case there are too much output
+              echo "## $layer" >> ${OUTPUT_LIGHT}
+              echo $items | xargs -n2 sh -c 'echo "- \`$1\`" $2' dummy >> ${OUTPUT_LIGHT}
+            fi
+          done
+
+      - name: Create/Update Comment
+        uses: actions/github-script@v7
+        env:
+          OUTPUTS: ${{ env.OUTPUTS }}
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const fs = require('fs');
+            const OUTPUT = 'plan_output.md';
+            const OUTPUT_LIGHT = 'plan_output_light.md';
+            const commentHeader = '## :terraform: Terragrunt Plan Results';
+
+            let outputContent = fs.readFileSync(OUTPUT, 'utf8');
+            let outputLightContent = fs.readFileSync(OUTPUT_LIGHT, 'utf8');
+
+            if (outputContent.trim() === '') {
+              outputContent = commentHeader + '\n\nNo changes detected by Terragrunt plan.';
+              outputLightContent = 'No changes detected by Terragrunt plan.';
+            } else {
+              outputContent = commentHeader + '\n\n' + outputContent;
+              outputLightContent = commentHeader + '\n\n' + outputLightContent;
+            }
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+            });
+
+            const botComment = comments.find(comment => comment.user.type === 'Bot' && comment.body.startsWith(commentHeader));
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: outputContent,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: outputContent,
+              });
+            }

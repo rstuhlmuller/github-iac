@@ -53,4 +53,4 @@ jobs:
           tg_version: "0.84.1"
           tg_command: plan
           tg_dir: ${{ matrix.directory }}
-          tg_comment: true
+          tg_comment: '1'

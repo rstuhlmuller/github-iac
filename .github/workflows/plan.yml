@@ -16,6 +16,8 @@ permissions:
 jobs:
   terragrunt-plan:
     runs-on: ubuntu-latest
+    concurrency:
+      group: "terragrunt-${{ matrix.directory }}"
     strategy:
       matrix:
         directory:
@@ -43,8 +45,6 @@ jobs:
         uses: gruntwork-io/terragrunt-action@v3
         env:
           TF_PLUGIN_CACHE_DIR: ${{ env.TF_PLUGIN_CACHE_DIR }}
-        concurrency:
-          group: "terragrunt-${{ matrix.directory }}"
         with:
           tofu_version: "1.10.6"
           tg_version: "0.84.1"

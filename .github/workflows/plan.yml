@@ -23,6 +23,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::716182248480:role/Github-TF-State
+
       - name: Install Terragrunt and OpenTofu
         uses: gruntwork-io/terragrunt-action@v3
         with:

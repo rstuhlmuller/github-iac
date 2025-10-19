@@ -12,6 +12,7 @@ permissions:
   statuses: write
   contents: read
   id-token: write
+  pull-requests: write
 
 env:
   TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
@@ -53,4 +54,4 @@ jobs:
           tg_version: "0.84.1"
           tg_command: plan
           tg_dir: ${{ matrix.directory }}
-          tg_comment: '1'
+          tg_comment: "1"

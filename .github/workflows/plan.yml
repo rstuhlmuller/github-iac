@@ -1,0 +1,35 @@
+name: Terragrunt Plan
+run-name: Terragrunt Plan - ${{ github.sha }}
+
+trigger:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches:
+      - main
+
+permissions:
+  checks: write
+  statuses: write
+  contents: read
+
+jobs:
+  terragrunt-plan:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory:
+          - "rstuhlmuller/github"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Terragrunt and OpenTofu
+        uses: gruntwork-io/terragrunt-action@v3
+        with:
+          terraform_version: "1.7.6"
+          terragrunt_version: "0.45.19"
+
+      - name: Terragrunt Plan
+        working-directory: ${{ matrix.directory }}
+        run: |
+          terragrunt plan

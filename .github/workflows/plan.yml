@@ -44,7 +44,7 @@ jobs:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
           key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/.terraform.lock.hcl') }}
 
-      - name: Install Terragrunt and OpenTofu
+      - name: Terragrunt Plan
         uses: gruntwork-io/terragrunt-action@v3
         env:
           TF_PLUGIN_CACHE_DIR: ${{ env.TF_PLUGIN_CACHE_DIR }}
@@ -57,7 +57,7 @@ jobs:
       - name: Post Terragrunt Plan as PR Comment
         run: |
           for f in  $(find ./*/ -name plan.out); do
-            terraform show -json "$f" > "${f%.out}_plan.json"
+            tofu show -json "$f" > "${f%.out}_plan.json"
             items=$(cat ${f%.out}_plan.json | jq -r '.resource_changes[]? | "\(.change.actions) \(.address)"' | grep -v "no-op" || true)
             if [ ! -z "$items" ]; then
               # Sorted Output
@@ -68,7 +68,7 @@ jobs:
               echo '</summary>' >> ${OUTPUT}
               echo '' >> ${OUTPUT}
               echo '``` hcl' >> ${OUTPUT}
-              terraform show -no-color plan.out >> ${OUTPUT}
+              tofu show -no-color plan.out >> ${OUTPUT}
               echo '```' >> ${OUTPUT}
               echo '</details>' >> ${OUTPUT}
               # The light Output in case there are too much output

@@ -46,6 +46,10 @@ inputs = {
       description = "Helm charts for OpenWebUI with MCPO sidecar"
       visibility  = "public"
     }
+    policies = {
+      description = "Repository centralizing all OPA policies."
+      visibility  = "public"
+    }
     renovate = {
       description = "Renovate bot configuration repository"
       visibility  = "public"
